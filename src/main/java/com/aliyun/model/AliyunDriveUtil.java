@@ -15,6 +15,7 @@ import java.util.Map;
  * @createTime 2021年07月17日 15:11:00
  */
 public class AliyunDriveUtil {
+    //刷新token
     private String refreshToken="66dca14e3fff483bbf78a0af6a0cafcd";
     private String accessToken;
     private String realpath;
