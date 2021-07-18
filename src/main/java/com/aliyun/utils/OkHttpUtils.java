@@ -72,7 +72,7 @@ public class OkHttpUtils {
     private static volatile OkHttpClient okHttpClient = null;
     private static volatile Semaphore semaphore = null;
     private Map<String, String> headerMap;
-    private Map<String, String> paramMap;
+    private Map<String, Object> paramMap;
     private String url;
     private Request.Builder request;
 
@@ -140,7 +140,7 @@ public class OkHttpUtils {
      * @param value 参数值
      * @return
      */
-    public OkHttpUtils addParam(String key, String value) {
+    public OkHttpUtils addParam(String key, Object value) {
         if (paramMap == null) {
             paramMap = new LinkedHashMap<>(16);
         }
@@ -174,10 +174,10 @@ public class OkHttpUtils {
         if (paramMap != null) {
             urlBuilder.append("?");
             try {
-                for (Map.Entry<String, String> entry : paramMap.entrySet()) {
+                for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
                     urlBuilder.append(URLEncoder.encode(entry.getKey(), "utf-8")).
                             append("=").
-                            append(URLEncoder.encode(entry.getValue(), "utf-8")).
+                            append(URLEncoder.encode(entry.getValue().toString(), "utf-8")).
                             append("&");
                 }
             } catch (Exception e) {
@@ -207,7 +207,9 @@ public class OkHttpUtils {
         } else {
             FormBody.Builder formBody = new FormBody.Builder();
             if (paramMap != null) {
-                paramMap.forEach(formBody::add);
+                paramMap.forEach((key,value)->{
+                    formBody.add(key,value.toString());
+                });
             }
             requestBody = formBody.build();
         }

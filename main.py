@@ -20,12 +20,13 @@ if __name__ != '__main__':
 
 from AliyunDrive import AliyunDrive
 
-
+#path  要上传的文件根目录 filepath 相对路径
 def upload_file(path, filepath):
     drive = AliyunDrive(DATA['DRIVE_ID'], DATA['ROOT_PATH'], DATA['CHUNK_SIZE'])
     # 刷新token
     drive.token_refresh()
     realpath = path + filepath
+    #加载要上传的文件
     drive.load_file(filepath, realpath)
     # 创建目录
     LOCK.acquire()
@@ -54,7 +55,7 @@ def upload_file(path, filepath):
             drive.upload()
             # 提交
             if drive.complete():
-                return drive.filepath_hash
+                re21turn drive.filepath_hash
             return False
 
     # 创建上传
