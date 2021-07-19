@@ -113,7 +113,7 @@ public class AliyunDriveUtil {
     }
 
     /**
-     * 预长传文件
+     * 预上传文件 如果hash网盘里面已经有了 会直接上传成功
      *
      * @param parentFileId
      * @return
