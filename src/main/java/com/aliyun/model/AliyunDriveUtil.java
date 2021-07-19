@@ -28,10 +28,10 @@ public class AliyunDriveUtil {
 
     //刷新token
     private String refreshToken = "66dca14e3fff483bbf78a0af6a0cafcd";
-    //访问token
-    private String accessToken;
     //网盘id标识
     private String driveId = "469891";
+    //访问token
+    private String accessToken;
     //根目录
     private String rootPath = "root";
     //请求头信息
@@ -129,13 +129,16 @@ public class AliyunDriveUtil {
         map.put("size", filesize);
         map.put("content_hash", hash);
         map.put("content_hash_name", "sha1");
+        //用的okhttp工具发送请求
         String jsonStr = OkHttpUtils.builder().url(AliyunDriveUrlEnum.CREATE_FILE.getUrl())
                 .addParams(map)
                 .addHeaders(headers)
                 .post(true).sync();
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+        //判断请求是否成功
         Boolean aBoolean = checkAuth(jsonObject);
         if (!aBoolean) {
+            //认证异常通常是token过期了
             throw new RuntimeException("认证异常");
         }
         partUploadUrlList = jsonObject.getJSONArray("part_info_list");
