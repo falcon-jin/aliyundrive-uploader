@@ -7,9 +7,12 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.LinkedHashMap;
@@ -231,6 +234,26 @@ public class OkHttpUtils {
             requestBody = formBody.build();
         }
         request = new Request.Builder().post(requestBody).url(url);
+        return this;
+    }
+
+    /**
+     * 阿里云盘上传文件
+     * @param fis
+     * @return
+     * @throws Exception
+     */
+    public OkHttpUtils put(FileInputStream fis) throws Exception {
+        RequestBody requestBody;
+        StringBuilder data =new StringBuilder();
+        int len = 0;
+        byte[] bt = new byte[1024*1024];
+        while ((len = fis.read(bt)) > 0) {//循环获取文件
+            data.append(new String(bt,0,len,StandardCharsets.UTF_8));
+        }
+
+        requestBody = RequestBody.create(data.toString().getBytes(StandardCharsets.UTF_8));
+        request = new Request.Builder().put(requestBody).url(url);
         return this;
     }
 

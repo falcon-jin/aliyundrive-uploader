@@ -15,6 +15,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author falcon
@@ -27,21 +28,34 @@ public class AliyunDriveUtil {
 
     //刷新token
     private String refreshToken = "66dca14e3fff483bbf78a0af6a0cafcd";
+    //访问token
     private String accessToken;
+    //网盘id标识
     private String driveId = "469891";
+    //根目录
     private String rootPath = "root";
+    //请求头信息
     private Map<String, String> headers = new HashMap<>();
 
     //上传的文件信息
     private String realpath;
+    //文件路径
     private String filepath;
+    //文件路径哈希值
     private String filepathHash;
+    //文件名称
     private String filename;
+    //文件hash值
     private String hash;
+    //文件大小
     private Long filesize;
+    //分片上传
     private List<Map<String, Object>> partInfoList;
+    //api返回的分片上传信息
     private List partUploadUrlList;
+    //文件id
     private String fileId;
+    //上传id
     private String uploadId;
 
 
@@ -172,16 +186,43 @@ public class AliyunDriveUtil {
         }
         if (CollectionUtil.isNotEmpty(partUploadUrlList)) {
             FileInputStream fis = new FileInputStream(file);
+            CountDownLatch latch = new CountDownLatch(partUploadUrlList.size());
             //分段上传文件
-            for (Object o : partUploadUrlList) {
-
+            partUploadUrlList.parallelStream().forEach(o->{
                 JSONObject json = (JSONObject) o;
                 String uploadUrl = json.getString("upload_url");
+                try {
+                    OkHttpUtils.builder().url(uploadUrl).put(fis).sync();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                latch.countDown();
+            });
+
+            try {
+                latch.await();
+                completeData();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+
         }
-        System.out.println("上传成功");
     }
 
+    public void completeData(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("drive_id", driveId);
+        map.put("file_id", fileId);
+        map.put("upload_id", uploadId);
+        String jsonStr = OkHttpUtils.builder().url(AliyunDriveUrlEnum.COMPLETE_UPLOAD.getUrl())
+                .addParams(map)
+                .addHeaders(headers).addHeader("content-type", "application/json;charset=UTF-8")
+                .post(true).sync();
+        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+        if(StrUtil.isNotBlank(jsonObject.getString("file_id"))){
+            System.out.println("上传成功");
+        }
+    }
 
     /**
      * 根据文件id获取文件下载路径
@@ -357,7 +398,7 @@ public class AliyunDriveUtil {
 
     public static void main(String[] args) throws Exception {
         AliyunDriveUtil aliyunDriveUtil = new AliyunDriveUtil();
-        aliyunDriveUtil.doUpload("root",new File("AliyunDrive.py"));
+        aliyunDriveUtil.doUpload("root",new File("src/main/java/com/aliyun/utils/test123.java"));
         //aliyunDriveUtil.downFile("60bc41cc548c162fd7d54c289a40c6c020046eb4", "D:/javaCode/myCode/gitHub/aliyundrive-uploader/");
         //System.out.println(s);
 

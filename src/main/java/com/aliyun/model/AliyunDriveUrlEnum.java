@@ -15,6 +15,8 @@ public enum AliyunDriveUrlEnum {
     CREATE_FOLDERr("https://api.aliyundrive.com/v2/file/create","创建文件"),
     GET_DOWNLOAD_URL("https://api.aliyundrive.com/v2/file/get_download_url","创建文件"),
     GET_UPLOAD_URL("https://api.aliyundrive.com/v2/file/get_upload_url","创建文件"),
+    COMPLETE_UPLOAD("https://api.aliyundrive.com/v2/file/get_upload_url","创建文件"),
+
     ;
     private String url;
     private String desc;
