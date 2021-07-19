@@ -8,6 +8,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -204,6 +205,7 @@ public class OkHttpUtils {
         return this;
     }
 
+
     /**
      * 初始化post方法
      *
@@ -248,7 +250,19 @@ public class OkHttpUtils {
             return "请求失败：" + e.getMessage();
         }
     }
+    public InputStream syncDown() {
+        setHeader(request);
+        try {
+            Response response = okHttpClient.newCall(request.build()).execute();
 
+            assert response.body() != null;
+            InputStream inputStream = response.body().byteStream();
+            return inputStream;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     /**
      * 异步请求，有返回值
      */
