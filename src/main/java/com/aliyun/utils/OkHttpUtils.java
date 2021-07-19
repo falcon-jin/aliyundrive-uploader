@@ -147,6 +147,13 @@ public class OkHttpUtils {
         paramMap.put(key, value);
         return this;
     }
+    public OkHttpUtils addParams(Map<String,Object> params) {
+        if (paramMap == null) {
+            paramMap = new LinkedHashMap<>(16);
+        }
+        paramMap.putAll(params);
+        return this;
+    }
 
     /**
      * 添加请求头
@@ -160,6 +167,14 @@ public class OkHttpUtils {
             headerMap = new LinkedHashMap<>(16);
         }
         headerMap.put(key, value);
+        return this;
+    }
+
+    public OkHttpUtils addHeaders(Map<String,String> headers) {
+        if (headerMap == null) {
+            headerMap = new LinkedHashMap<>(16);
+        }
+        headerMap.putAll(headers);
         return this;
     }
 
