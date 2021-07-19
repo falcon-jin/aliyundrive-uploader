@@ -306,7 +306,7 @@ public class AliyunDriveUtil {
      * @param parentFolderId 上级目录id
      */
     public Boolean createFolder(String folderName, String parentFolderId) {
-        String jsonStr = OkHttpUtils.builder().url(AliyunDriveUrlEnum.CREATE_FOLDERr.getUrl())
+        String jsonStr = OkHttpUtils.builder().url(AliyunDriveUrlEnum.CREATE_FOLDER.getUrl())
                 // 有参数的话添加参数，可多个
                 .addParam("drive_id", driveId)
                 .addParam("parent_file_id", parentFolderId)
