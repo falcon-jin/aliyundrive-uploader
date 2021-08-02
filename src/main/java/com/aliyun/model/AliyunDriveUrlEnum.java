@@ -35,7 +35,7 @@ public enum AliyunDriveUrlEnum {
     /**
      * 结束分片上传
      */
-    COMPLETE_UPLOAD("https://api.aliyundrive.com/v2/file/get_upload_url", "结束分片上传");
+    COMPLETE_UPLOAD("https://api.aliyundrive.com/v2/file/complete", "结束分片上传");
     /**
      * 请求路径
      */

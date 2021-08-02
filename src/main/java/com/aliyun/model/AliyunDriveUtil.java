@@ -27,7 +27,7 @@ import java.util.concurrent.CountDownLatch;
 public class AliyunDriveUtil {
 
     //刷新token
-    private String refreshToken = "66dca14e3fff483bbf78a0af6a0cafcd";
+    private String refreshToken = "1d308335e1ed4bf5827971f27ee71ede";
     //网盘id标识
     private String driveId = "469891";
     //访问token
@@ -401,8 +401,8 @@ public class AliyunDriveUtil {
 
     public static void main(String[] args) throws Exception {
         AliyunDriveUtil aliyunDriveUtil = new AliyunDriveUtil();
-        aliyunDriveUtil.doUpload("root",new File("src/main/java/com/aliyun/utils/test123.java"));
-        //aliyunDriveUtil.downFile("60bc41cc548c162fd7d54c289a40c6c020046eb4", "D:/javaCode/myCode/gitHub/aliyundrive-uploader/");
+        //aliyunDriveUtil.doUpload("root",new File("src/main/java/com/aliyun/utils/test1231111.java"));
+        aliyunDriveUtil.downFile("610793feffa93d14e0cc414aa64fc1317d83dc92", "D:/javaCode/myCode/gitHub/aliyundrive-uploader/");
         //System.out.println(s);
 
 
